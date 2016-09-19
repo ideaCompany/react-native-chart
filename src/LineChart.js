@@ -57,7 +57,6 @@ export default class LineChart extends Component<void, any, any> {
 		const containerHeight = this.props.height;
 		const containerWidth = this.props.width;
 		const data = lineData || [];
-		const colour = colour;
 		let minBound = this.props.minVerticalBound;
 		let maxBound = this.props.maxVerticalBound;
 
