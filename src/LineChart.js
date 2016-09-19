@@ -21,6 +21,7 @@ export default class LineChart extends Component<void, any, any> {
 
 	constructor(props : any) {
 		super(props);
+		console.log(props);
 		const heightValue = (props.animated) ? heightZero : props.height;
 		const opacityValue = (props.animated) ? 0 : 1;
 		this.state = { height: new Animated.Value(heightValue), opacity: new Animated.Value(opacityValue) };
@@ -40,10 +41,23 @@ export default class LineChart extends Component<void, any, any> {
 		}
 	}
 
-	_drawLine = () => {
+	_drawLines = () => {
+
+		var lines = [];
+
+		for(var lineData in this.props.data) {
+			lines.push(this._drawLine(this.props.data[lineData], this.props.dataColours[lineData]));
+		}
+
+		return lines;
+
+	};
+
+	_drawLine = (lineData,colour) => {
 		const containerHeight = this.props.height;
 		const containerWidth = this.props.width;
-		const data = this.props.data || [];
+		const data = lineData || [];
+		const colour = colour;
 		let minBound = this.props.minVerticalBound;
 		let maxBound = this.props.maxVerticalBound;
 
@@ -55,7 +69,7 @@ export default class LineChart extends Component<void, any, any> {
 
 		const divisor = calculateDivisor(minBound, maxBound);
 		const scale = (containerHeight + 1) / divisor;
-		const horizontalStep = containerWidth / (data.length - 1);
+		const horizontalStep = containerWidth / data.length;
 		const dataPoints = [];
 		const firstDataPoint = data[0][1];
 		let height = (minBound * scale) + (containerHeight - (firstDataPoint * scale));
@@ -87,7 +101,7 @@ export default class LineChart extends Component<void, any, any> {
 			<View>
 				<View style={{ position: 'absolute' }}>
 					<Surface width={containerWidth} height={containerHeight}>
-						<AnimatedShape d={path} stroke={this.props.color || C.BLUE} strokeWidth={this.props.lineWidth} />
+						<AnimatedShape d={path} stroke={colour || C.BLUE} strokeWidth={this.props.lineWidth} />
 						<AnimatedShape d={fillPath} fill={this.props.fillColor} />
 					</Surface>
 				</View>
@@ -95,9 +109,10 @@ export default class LineChart extends Component<void, any, any> {
 					<Surface width={containerWidth} height={containerHeight} />
 				</View>
 				{(() => {
+					if (!this.props.showDataPoint) return null;
 					return (
 						<Surface width={containerWidth} height={containerHeight}>
-							{this.props.showDataPoint && dataPoints.map((d, i) => <Circle key={i} {...d} />)}
+							{dataPoints.map((d, i) => <Circle key={i} {...d} />)}
 						</Surface>
 					);
 				})()}
@@ -111,7 +126,7 @@ export default class LineChart extends Component<void, any, any> {
 				<View style={{ overflow: 'hidden' }}>
 					<Grid {...this.props} />
 					<Animated.View style={{ height: this.state.height, opacity: this.state.opacity, backgroundColor: 'transparent' }}>
-						{this._drawLine()}
+						{this._drawLines()}
 					</Animated.View>
 				</View>
 			);
@@ -120,7 +135,7 @@ export default class LineChart extends Component<void, any, any> {
 			<View>
 				<Grid {...this.props} />
 				<View style={{ height: this.props.height }}>
-					{this._drawLine()}
+					{this._drawLines()}
 				</View>
 			</View>
 		);
