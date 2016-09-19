@@ -126,7 +126,15 @@ export default class LineChart extends Component<void, any, any> {
 				<View style={{ overflow: 'hidden' }}>
 					<Grid {...this.props} />
 					<Animated.View style={{ height: this.state.height, opacity: this.state.opacity, backgroundColor: 'transparent' }}>
-						{this._drawLines()}
+						{
+							this._drawLines().map(function(result,index,arr){
+								return(
+									<View key={index}>
+										result
+									</View>
+								);
+							})
+						}
 					</Animated.View>
 				</View>
 			);
@@ -135,7 +143,15 @@ export default class LineChart extends Component<void, any, any> {
 			<View>
 				<Grid {...this.props} />
 				<View style={{ height: this.props.height }}>
-					{this._drawLines()}
+					{
+						this._drawLines().map(function(result,index,arr){
+							return(
+								<View key={index}>
+									result
+								</View>
+							);
+						})
+					}
 				</View>
 			</View>
 		);
