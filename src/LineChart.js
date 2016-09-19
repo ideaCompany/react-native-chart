@@ -130,7 +130,7 @@ export default class LineChart extends Component<void, any, any> {
 							this._drawLines().map(function(result,index,arr){
 								return(
 									<View key={index}>
-										result
+										{result}
 									</View>
 								);
 							})
@@ -147,7 +147,7 @@ export default class LineChart extends Component<void, any, any> {
 						this._drawLines().map(function(result,index,arr){
 							return(
 								<View key={index}>
-									result
+									{result}
 								</View>
 							);
 						})
