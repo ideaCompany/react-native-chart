@@ -54,8 +54,9 @@ export default class LineChart extends Component<void, any, any> {
 	};
 
 	_drawLine = (lineData,colour) => {
-		const containerHeight = this.props.height;
-		const containerWidth = this.props.width;
+
+		const containerHeight = isNaN(this.props.height)?200:this.props.height;
+		const containerWidth = isNaN(this.props.width)?200:this.props.width;
 		const data = lineData || [];
 		let minBound = this.props.minVerticalBound;
 		let maxBound = this.props.maxVerticalBound;
